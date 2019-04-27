@@ -9,16 +9,12 @@ import com.epam.themes.util.ICallback;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class StudentsWebService implements IWebService<Student> {
 
     private List<Student> mStudents = new ArrayList<>();
     private Random mRandom = new Random();
     private Handler mHandler = new Handler(Looper.getMainLooper());
-
-    private static ExecutorService executorService = Executors.newCachedThreadPool();
 
     {
         for (int i = 0; i < 1000; i++) {
@@ -37,8 +33,14 @@ public class StudentsWebService implements IWebService<Student> {
     @Override
     public void getEntities(final int pStartRange,
                             final int pEndRange,
-                            IOperation<Student> poperation) {
-        executorService.execute(poperation);
+                            final ICallback<List<Student>> pCallback) {
+        mHandler.postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                pCallback.onResult(mStudents.subList(pStartRange, pEndRange));
+            }
+        }, 1000);
     }
 
     @Override

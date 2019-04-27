@@ -11,7 +11,7 @@ public interface IWebService<T> {
 
     void getEntities(final int pStartRange,
                      final int pEndRange,
-                     IOperation<T> poperation);
+                     final ICallback<List<T>> pCallback);
 
     void removeEntity(final Long pId);
 }
